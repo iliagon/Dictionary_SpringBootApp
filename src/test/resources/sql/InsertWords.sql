@@ -1,0 +1,4 @@
+INSERT INTO PUBLIC.WORD (WORD_ID, MEANING, SPELLING, LANGUAGE_CODE, PART_OF_SPEECH_CODE) VALUES (1, 'Shed tears, especially as an expression of distress or pain', 'cry', 'en', 'verb');
+INSERT INTO PUBLIC.WORD (WORD_ID, MEANING, SPELLING, LANGUAGE_CODE, PART_OF_SPEECH_CODE) VALUES (2, 'Громко кричать, слишком громко разговаривать', 'орать', 'ru', 'verb');
+INSERT INTO PUBLIC.WORD (WORD_ID, MEANING, SPELLING, LANGUAGE_CODE, PART_OF_SPEECH_CODE) VALUES (3, 'Громко говорить', 'кричать', 'ru', 'verb');
+INSERT INTO PUBLIC.WORD (WORD_ID, MEANING, SPELLING, LANGUAGE_CODE, PART_OF_SPEECH_CODE) VALUES (4, 'Гучна казаць', 'крычаць', 'by', 'verb');
