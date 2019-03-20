@@ -82,13 +82,6 @@ public class TranslateTest {
                                 new PostTranslateDto().setWordId1(1L).setWordId2(2L))))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-
-        TranslatePostResultDto translate = objectMapper.readValue(response, TranslatePostResultDto.class);
-
-        assertAll(
-                "Check uuid transfer",
-                () -> Assertions.assertNotNull(translate.getTranslateRelationUUID())
-        );
     }
 
 

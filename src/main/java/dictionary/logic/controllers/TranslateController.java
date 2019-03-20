@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +45,7 @@ public class TranslateController {
                                                       @RequestParam(value = "langTo") String langTo) {
         Language languageToTranslate = langService.findByCode(langTo);
         List<Word> wordToTranslateList = wordService.findBySpellingAndLang(spelling, langService.findByCode(langFrom));
+
         List<TranslateResultDto> translateResultList = new ArrayList<>();
         wordToTranslateList.forEach(word ->
                 translateResultList.add(findTranslate(word, languageToTranslate)));
@@ -65,16 +65,16 @@ public class TranslateController {
 
 
     @PatchMapping("/translates")
-    public TranslatePostResultDto addTranslate(@Valid @RequestBody PostTranslateDto postTranslate) throws URISyntaxException {
-        String translateRelationUUID = wordService.addTranslateRelation(
+    public ResponseEntity addTranslate(@Valid @RequestBody PostTranslateDto postTranslate) {
+        wordService.addTranslateRelation(
                 wordService.findById(postTranslate.getWordId1()),
                 wordService.findById(postTranslate.getWordId2()));
 
-        return new TranslatePostResultDto().setTranslateRelationUUID(translateRelationUUID);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/translates/{wordId}")
-    public ResponseEntity<Word> deleteWord(@PathVariable Long wordId) {
+    public ResponseEntity deleteWord(@PathVariable Long wordId) {
         wordService.deleteTranslateRelationFromWord(wordService.findById(wordId));
         return ResponseEntity.noContent().build();
     }
