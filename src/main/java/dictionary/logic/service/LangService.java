@@ -14,14 +14,7 @@ public class LangService {
     private final LangRepository repository;
 
     public Language replace(Language newLanguage, String code) {
-         return repository.findById(code)
-                .map(partOfSpeech ->
-                        repository.save(
-                                partOfSpeech.setInfo(newLanguage.getInfo()))
-                )
-                .orElseGet(() ->
-                        repository.save(newLanguage.setCode(code))
-                );
+         return repository.save(newLanguage.setCode(code));
     }
 
     public Language findByCode(String code) {

@@ -7,13 +7,12 @@ import org.springframework.hateoas.ResourceSupport;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 //Совмещать Entity и DTO плохая практика. Но т.к. в данном случае они идентичны
 //Entity и DTO объеденены в одну сущность
 @Getter
 @Setter
-@ToString(exclude = "translateRelations")
+@ToString
 @Accessors(chain = true)
 @Entity
 public class Word extends ResourceSupport implements Serializable {
@@ -33,11 +32,10 @@ public class Word extends ResourceSupport implements Serializable {
     @JoinColumn(referencedColumnName = "code", nullable = false)
     private PartOfSpeech partOfSpeech;
 
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "compositePK.word")
-    private List<TranslateRelation> translateRelations;
-
     private String meaning;
+
+    @JsonIgnore
+    private String translateRelationUUID;
 
     @Override
     public boolean equals(Object o) {

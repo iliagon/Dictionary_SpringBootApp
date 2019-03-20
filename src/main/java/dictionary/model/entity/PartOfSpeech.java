@@ -28,6 +28,6 @@ public class PartOfSpeech extends ResourceSupport implements Serializable {
     @JsonIgnore
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "partOfSpeech")
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "partOfSpeech")
     private List<Word> words;
 }

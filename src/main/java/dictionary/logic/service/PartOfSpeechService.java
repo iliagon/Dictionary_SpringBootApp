@@ -14,14 +14,7 @@ public class PartOfSpeechService {
     private final PartOfSpeechRepository repository;
 
     public PartOfSpeech replace(PartOfSpeech newPartOfSpeech, String code) {
-         return repository.findById(code)
-                .map(partOfSpeech ->
-                        repository.save(
-                                partOfSpeech.setInfo(newPartOfSpeech.getInfo()))
-                )
-                .orElseGet(() ->
-                        repository.save(newPartOfSpeech.setCode(code))
-                );
+         return repository.save(newPartOfSpeech.setCode(code));
     }
 
     public PartOfSpeech findByCode(String code) {

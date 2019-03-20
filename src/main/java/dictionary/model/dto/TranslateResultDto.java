@@ -15,6 +15,5 @@ import java.util.List;
 public class TranslateResultDto extends ResourceSupport {
     private Word originalWord;
     private Language languageToTranslate;
-    private String translateRelationUUID;
     private List<Word> translateWordList;
 }

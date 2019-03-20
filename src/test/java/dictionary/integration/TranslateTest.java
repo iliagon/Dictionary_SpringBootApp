@@ -5,11 +5,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dictionary.logic.repository.LangRepository;
 import dictionary.logic.repository.PartOfSpeechRepository;
-import dictionary.logic.repository.TranslateRepository;
 import dictionary.logic.repository.WordRepository;
 import dictionary.model.dto.PostTranslateDto;
 import dictionary.model.dto.TranslatePostResultDto;
-import dictionary.model.dto.TranslateRelationDto;
 import dictionary.model.dto.TranslateResultDto;
 import dictionary.model.entity.Word;
 import org.junit.jupiter.api.Assertions;
@@ -22,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.transaction.TestTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,9 +52,6 @@ public class TranslateTest {
 
     @Autowired
     private WordRepository wordRepository;
-
-    @Autowired
-    private TranslateRepository translateRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -120,8 +116,6 @@ public class TranslateTest {
         List<TranslateResultDto> translateResultList = objectMapper.readerFor(new TypeReference<List<TranslateResultDto>>() {
         }).readValue(translateResultListNode);
         TranslateResultDto translateResult = translateResultList.get(0);
-
-        Assertions.assertNotNull(translateResult.getTranslateRelationUUID());
 
         Set<Word> actualTranslateList = new HashSet<>(translateResult.getTranslateWordList());
         Set<Word> expectedTranslateList = new HashSet<>(Arrays.asList(
@@ -206,21 +200,23 @@ public class TranslateTest {
         long wordId = 1L;
 
         //Проверка, что перевод, который удаляется в тесте существует
-        Assertions.assertTrue(translateRepository.findAll().stream()
-                .anyMatch(translateRelation ->
-                        translateRelation.getCompositePK().getWord().getWordId() == wordId &&
-                                translateRelation.getCompositePK().getTranslateRelationUUID().equals(translateUUID)));
+        Assertions.assertTrue(wordRepository.findAll().stream()
+                .anyMatch(word ->
+                        word.getWordId() == wordId &&
+                                word.getTranslateRelationUUID().equals(translateUUID)));
 
         mvc.perform(
                 MockMvcRequestBuilders
-                        .delete("/translates?translateRelationUUID={translateRelationUUID}&wordId={wordId}", translateUUID, wordId)
+                        .delete("/translates/{wordId}", wordId)
                         .headers(HTTP_HEADERS))
                 .andExpect(status().isNoContent());
 
+        TestTransaction.end();
+
         //Проверка, что перевод удалился
-        Assertions.assertFalse(translateRepository.findAll().stream()
-                .anyMatch(translateRelation ->
-                        translateRelation.getCompositePK().getWord().getWordId() == wordId &&
-                                translateRelation.getCompositePK().getTranslateRelationUUID().equals(translateUUID)));
+        Assertions.assertFalse(wordRepository.findAll().stream()
+                .anyMatch(word ->
+                        word.getWordId() == wordId &&
+                                word.getTranslateRelationUUID().equals(translateUUID)));
     }
 }
