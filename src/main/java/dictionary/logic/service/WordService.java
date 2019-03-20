@@ -91,7 +91,7 @@ public class WordService {
                 anotherTranslateRelationUUID = word2.getTranslateRelationUUID();
             } else {
                 newTranslateRelationUUID = word2.getTranslateRelationUUID();
-                anotherTranslateRelationUUID = word2.getTranslateRelationUUID();
+                anotherTranslateRelationUUID = word1.getTranslateRelationUUID();
             }
 
             if (!newTranslateRelationUUID.equals(anotherTranslateRelationUUID)) { //If another word has another TranslateRelationUUID, update it.
