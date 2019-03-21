@@ -34,8 +34,11 @@ public class Word extends ResourceSupport implements Serializable {
 
     private String meaning;
 
+    /**
+     * semantic identifier
+     */
     @JsonIgnore
-    private String translateRelationUUID;
+    private String translateUUID;
 
     @Override
     public boolean equals(Object o) {

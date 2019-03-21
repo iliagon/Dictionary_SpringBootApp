@@ -2,7 +2,6 @@ package dictionary.logic.controllers.resource.assembler;
 
 import dictionary.logic.controllers.TranslateController;
 import dictionary.model.dto.TranslateResultDto;
-import dictionary.model.entity.PartOfSpeech;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.stereotype.Component;

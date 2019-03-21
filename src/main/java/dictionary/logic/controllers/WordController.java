@@ -37,12 +37,12 @@ public class WordController {
         List<Word> wordEntities;
         if (langCode != null && !langCode.isEmpty() && spelling != null && !spelling.isEmpty()) {
             Language language = langService.findByCode(langCode);
-            wordEntities = wordService.findBySpellingAndLang(spelling, language);
+            wordEntities = wordService.findWords(spelling, language);
         } else if (langCode != null && !langCode.isEmpty()) {
             Language language = langService.findByCode(langCode);
-            wordEntities = wordService.findWordsByLanguage(language);
+            wordEntities = wordService.findWords(language);
         } else if (spelling != null && !spelling.isEmpty())
-            wordEntities = wordService.findBySpelling(spelling);
+            wordEntities = wordService.findWords(spelling);
         else
             wordEntities = wordService.findAll();
 

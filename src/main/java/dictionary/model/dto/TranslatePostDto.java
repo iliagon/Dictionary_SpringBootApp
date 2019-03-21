@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Accessors(chain = true)
-public class PostTranslateDto {
+public class TranslatePostDto {
     @NotNull
     private Long wordId1;
     @NotNull

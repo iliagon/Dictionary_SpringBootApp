@@ -10,8 +10,4 @@ public class WordNotFoundException extends NotFoundException {
 	public WordNotFoundException(Long id) {
 		super("Could not find word with wordId = " + id, ERROR_CODE);
 	}
-
-	public WordNotFoundException(String spelling, Language language) {
-		super("Could not find word with spelling=" + spelling +"and language="+language, ERROR_CODE);
-	}
 }

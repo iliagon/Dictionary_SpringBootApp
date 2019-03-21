@@ -44,7 +44,7 @@ public class TranslateController {
                                                       @RequestParam(value = "langFrom") String langFrom,
                                                       @RequestParam(value = "langTo") String langTo) {
         Language languageToTranslate = langService.findByCode(langTo);
-        List<Word> wordToTranslateList = wordService.findBySpellingAndLang(spelling, langService.findByCode(langFrom));
+        List<Word> wordToTranslateList = wordService.findWords(spelling, langService.findByCode(langFrom));
 
         List<TranslateResultDto> translateResultList = new ArrayList<>();
         wordToTranslateList.forEach(word ->
@@ -65,8 +65,8 @@ public class TranslateController {
 
 
     @PatchMapping("/translates")
-    public ResponseEntity addTranslate(@Valid @RequestBody PostTranslateDto postTranslate) {
-        wordService.addTranslateRelation(
+    public ResponseEntity addTranslate(@Valid @RequestBody TranslatePostDto postTranslate) {
+        wordService.addTranslate(
                 wordService.findById(postTranslate.getWordId1()),
                 wordService.findById(postTranslate.getWordId2()));
 

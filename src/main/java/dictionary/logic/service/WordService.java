@@ -21,15 +21,15 @@ public class WordService {
         return repository.save(replaceWord.setWordId(id));
     }
 
-    public List<Word> findBySpellingAndLang(String spelling, Language language) {
+    public List<Word> findWords(String spelling, Language language) {
         return repository.findBySpellingAndLanguage(spelling, language);
     }
 
-    public Optional<Word> findBySpellingAndLangAndMeaning(String spelling, Language language, String meaning) {
+    public Optional<Word> findWords(String spelling, Language language, String meaning) {
         return repository.findBySpellingAndLanguageAndMeaning(spelling, language, meaning);
     }
 
-    public List<Word> findBySpelling(String spelling) {
+    public List<Word> findWords(String spelling) {
         return repository.findBySpelling(spelling);
     }
 
@@ -38,7 +38,7 @@ public class WordService {
                 .orElseThrow(() -> new WordNotFoundException(id));
     }
 
-    public List<Word> findWordsByLanguage(Language lang) {
+    public List<Word> findWords(Language lang) {
         return repository.findByLanguage(lang);
     }
 
@@ -52,7 +52,7 @@ public class WordService {
      * Note: Если такое слово уже есть в базе - новое слово не создаётся
      */
     public Word add(Word newWord) {
-        return findBySpellingAndLangAndMeaning(newWord.getSpelling(), newWord.getLanguage(), newWord.getMeaning())
+        return findWords(newWord.getSpelling(), newWord.getLanguage(), newWord.getMeaning())
                 .orElseGet(() -> repository.save(newWord));
     }
 
@@ -64,41 +64,41 @@ public class WordService {
         return repository.findTranslatedWords(word, language);
     }
 
-    public String addTranslateRelation(Word word1, Word word2) {
+    public String addTranslate(Word word1, Word word2) {
         if (!word1.getPartOfSpeech().equals(word2.getPartOfSpeech()))
             throw new DifferendPartOfSpeechException();
 
-        String translateRelationUUID = chooseTranslateRelationId(word1, word2);
-        word1.setTranslateRelationUUID(translateRelationUUID);
-        word2.setTranslateRelationUUID((translateRelationUUID));
+        String translateUUID = chooseTranslateRelationId(word1, word2);
+        word1.setTranslateUUID(translateUUID);
+        word2.setTranslateUUID((translateUUID));
 
-        return translateRelationUUID;
+        return translateUUID;
     }
 
     /**
-     * Choice translateRelationUUID
+     * Choice translateUUID
      */
     private String chooseTranslateRelationId(Word word1, Word word2) {
-        String newTranslateRelationUUID;
+        String newTranslateUUID;
         //If there are no translations associated with the current words
-        if (word1.getTranslateRelationUUID() == null && word2.getTranslateRelationUUID() == null)
-            newTranslateRelationUUID = UUID.randomUUID().toString();
+        if (word1.getTranslateUUID() == null && word2.getTranslateUUID() == null)
+            newTranslateUUID = UUID.randomUUID().toString();
         else {
-            String anotherTranslateRelationUUID;
+            String anotherTranslateUUID;
             //Get the TranslateRelationUUID of one of the words
-            if (word1.getTranslateRelationUUID() != null) {
-                newTranslateRelationUUID = word1.getTranslateRelationUUID();
-                anotherTranslateRelationUUID = word2.getTranslateRelationUUID();
+            if (word1.getTranslateUUID() != null) {
+                newTranslateUUID = word1.getTranslateUUID();
+                anotherTranslateUUID = word2.getTranslateUUID();
             } else {
-                newTranslateRelationUUID = word2.getTranslateRelationUUID();
-                anotherTranslateRelationUUID = word1.getTranslateRelationUUID();
+                newTranslateUUID = word2.getTranslateUUID();
+                anotherTranslateUUID = word1.getTranslateUUID();
             }
-
-            if (!newTranslateRelationUUID.equals(anotherTranslateRelationUUID)) { //If another word has another TranslateRelationUUID, update it.
-                    repository.updateTranslateRelationsUUID(anotherTranslateRelationUUID, newTranslateRelationUUID);
+            //If another word has another TranslateRelationUUID, update it.
+            if (!newTranslateUUID.equals(anotherTranslateUUID)) {
+                    repository.updateTranslateRelationsUUID(anotherTranslateUUID, newTranslateUUID);
             }
         }
-        return newTranslateRelationUUID;
+        return newTranslateUUID;
 }
 
     public void deleteTranslateRelationFromWord(Word word) {

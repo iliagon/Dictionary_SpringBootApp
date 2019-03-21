@@ -6,8 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dictionary.logic.repository.LangRepository;
 import dictionary.logic.repository.PartOfSpeechRepository;
 import dictionary.logic.repository.WordRepository;
-import dictionary.model.dto.PostTranslateDto;
-import dictionary.model.dto.TranslatePostResultDto;
+import dictionary.model.dto.TranslatePostDto;
 import dictionary.model.dto.TranslateResultDto;
 import dictionary.model.entity.Word;
 import org.junit.jupiter.api.Assertions;
@@ -79,7 +78,7 @@ public class TranslateTest {
                         .patch("/translates")
                         .headers(HTTP_HEADERS)
                         .content(objectMapper.writeValueAsString(
-                                new PostTranslateDto().setWordId1(1L).setWordId2(2L))))
+                                new TranslatePostDto().setWordId1(1L).setWordId2(2L))))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
     }
@@ -196,7 +195,7 @@ public class TranslateTest {
         Assertions.assertTrue(wordRepository.findAll().stream()
                 .anyMatch(word ->
                         word.getWordId() == wordId &&
-                                word.getTranslateRelationUUID().equals(translateUUID)));
+                                word.getTranslateUUID().equals(translateUUID)));
 
         mvc.perform(
                 MockMvcRequestBuilders
@@ -210,6 +209,6 @@ public class TranslateTest {
         Assertions.assertFalse(wordRepository.findAll().stream()
                 .anyMatch(word ->
                         word.getWordId() == wordId &&
-                                word.getTranslateRelationUUID().equals(translateUUID)));
+                                word.getTranslateUUID().equals(translateUUID)));
     }
 }
